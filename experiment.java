@@ -15,6 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
+
 
 // Here we extend the base OpMode class to be the new NullOp class.
 
@@ -31,6 +33,8 @@ public class experiment extends OpMode
     private DcMotor motorRight;
     private ModernRoboticsI2cRangeSensor rangeSensor;
     double distance;
+    long current;
+    double dist0;
 
     @Override
     public void init()
@@ -58,6 +62,7 @@ public class experiment extends OpMode
     @Override
     public void start()
     {
+        dist0 = rangeSensor.getDistance(DistanceUnit.CM);
     }
     @Override
     public void stop()
@@ -72,35 +77,41 @@ public class experiment extends OpMode
     public void loop()
     {
         distance = rangeSensor.getDistance(DistanceUnit.CM);
+        current = System.currentTimeMillis();
+
+        if(current%1500==0){
+            if(distance-dist0<5) {
+                inainte(-1.0);
+                sleep(750);
+            }
+
+            dist0 = rangeSensor.getDistance(DistanceUnit.CM);
+
+        }
+
         if(distance <= 25.0){
 
-            motorRight.setPower(0.0);
-            motorLeft.setPower(0.0);
-
+            oprire();
             sleep(100);
 
-            motorRight.setPower(-1.0);
-            motorLeft.setPower(-1.0);
-
+            inainte(-1.0);
             sleep(1250);
 
-            motorRight.setPower(0.0);
-            motorLeft.setPower(0.0);
+            oprire();
 
-            //stanga
-            motorRight.setPower(1.0);
-            motorLeft.setPower(-1.0);
+            //intre stanga si inapoi
+            vireaza(-1.0);
 
-            sleep(800);
+            Random rand = new Random();
+            long duration = rand.nextInt(1000)+800;
 
-            motorLeft.setPower(0.0);
-            motorRight.setPower(0.0);
+            sleep(duration);
 
-            sleep(1000);
+            oprire();
+            sleep(500);
         }
         else{
-            motorLeft.setPower(1.0);
-            motorRight.setPower(1.0);
+            inainte(1.0);
         }
     }
 
@@ -111,6 +122,21 @@ public class experiment extends OpMode
         current_time = past_time;
         while(current_time < past_time + time)
             current_time = System.currentTimeMillis();
+    }
+
+    public void inainte(double speed){
+        motorRight.setPower(speed);
+        motorLeft.setPower(speed);
+    }
+
+    public void oprire(){
+        motorLeft.setPower(0.0);
+        motorRight.setPower(0.0);
+    }
+
+    public void vireaza(double directie){
+        motorRight.setPower(-directie);
+        motorLeft.setPower(directie);
     }
 
 }

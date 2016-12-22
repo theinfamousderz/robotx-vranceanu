@@ -26,7 +26,7 @@ public class joystick extends LinearOpMode {
     private DcMotor motorRight;
     private ModernRoboticsI2cRangeSensor rangeSensor;
     float xValue, yValue, leftPower, rightPower;
-    private ModernRoboticsI2cCompassSensor compass;
+    //private ModernRoboticsI2cCompassSensor compass;
     int count = 0, count2 = 1;
     double distance;
 
@@ -36,10 +36,10 @@ public class joystick extends LinearOpMode {
         motorLeft = hardwareMap.dcMotor.get("MotorLeft");
         motorRight = hardwareMap.dcMotor.get("MotorRight");
         rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "RangeSensor");
-        compass = hardwareMap.get(ModernRoboticsI2cCompassSensor.class, "CompassSensor");
+        //compass = hardwareMap.get(ModernRoboticsI2cCompassSensor.class, "CompassSensor");
 
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
-        compass.setMode(CompassSensor.CompassMode.MEASUREMENT_MODE);
+        //compass.setMode(CompassSensor.CompassMode.MEASUREMENT_MODE);
 
         telemetry.addData("Status", "asteptam...");
         telemetry.update();
@@ -51,7 +51,7 @@ public class joystick extends LinearOpMode {
             double x, y, z;
             yValue = gamepad1.left_stick_y;
             xValue = gamepad1.left_stick_x;
-
+            /*
             if(gamepad1.y)
                 if(count2%2==0){
                     compass.setMode(CompassSensor.CompassMode.MEASUREMENT_MODE);
@@ -64,7 +64,7 @@ public class joystick extends LinearOpMode {
                     telemetry.addData("Compass", "Compass in calibration mode");
                     telemetry.update();
                     count2++;
-                }
+                }*/
 
 
             if(gamepad1.x)
@@ -78,7 +78,7 @@ public class joystick extends LinearOpMode {
                 }
 
             distance = rangeSensor.getDistance(DistanceUnit.CM);
-
+            /*
             if(distance<10.0){
                 motorLeft.setPower(-1.0);
                 motorRight.setPower(-1.0);
@@ -87,7 +87,7 @@ public class joystick extends LinearOpMode {
                 motorRight.setPower(0.0);
                 sleep(50);
             }
-
+            */
 
 
             leftPower =  yValue - xValue;
@@ -96,6 +96,7 @@ public class joystick extends LinearOpMode {
             motorLeft.setPower(-leftPower);
             motorRight.setPower(-rightPower);
 
+            /*
             Acceleration accel = compass.getAcceleration();
 
             double accelMagnitude = Math.sqrt(accel.xAccel*accel.xAccel + accel.yAccel*accel.yAccel + accel.zAccel*accel.zAccel);
@@ -117,7 +118,7 @@ public class joystick extends LinearOpMode {
             telemetry.addData("heading", "%.1f", compass.getDirection());
             telemetry.addData("vector planar", Math.sqrt(y*y+z*z));
             telemetry.update();
-
+            */
             idle();
         }
     }
